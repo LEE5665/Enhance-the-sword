@@ -1,44 +1,110 @@
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
+    public static SaveManager Instance { get; private set; }
+
     private string saveFilePath;
-    [SerializeField] private Button StartButton;
+    [SerializeField] private Button LoadButton;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
         saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
+
         if (File.Exists(saveFilePath))
         {
-            StartButton.interactable = false;
+            if (LoadButton != null)
+                LoadButton.interactable = true;
+
             Debug.Log("세이브 파일 있음! → 불러오기");
-            //LoadGame();
+            // LoadGame();
         }
         else
         {
-            StartButton.interactable = true;
+            if (LoadButton != null)
+                LoadButton.interactable = false;
+
             Debug.Log("세이브 파일 없음! → 새로 시작");
-            //NewGame();
+            // NewGame();
         }
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadGame()
     {
-        
-    }
+        if (!File.Exists(saveFilePath))
+        {
+            Debug.LogWarning("❌ 저장 파일 없음");
+            NewGame();
+            LoadGame();
+            return;
+        }
 
-    void LoadGame()
-    {
         string json = File.ReadAllText(saveFilePath);
+        SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
+
+        var inventoryManager = FindAnyObjectByType<InventoryManager>();
+        if (inventoryManager != null)
+        {
+            inventoryManager.Inventory = data.items;
+            inventoryManager.money = data.money;
+        }
+        else
+        {
+            Debug.LogWarning("❌ InventoryManager를 찾을 수 없습니다");
+        }
+
+        Debug.Log("✅ 불러오기 완료");
     }
 
-    void NewGame()
+    public void NewGame()
     {
-        // 새 게임 데이터 생성 및 저장
-        // 예: PlayerPrefs 초기화, 기본 스탯 설정 등
+        SaveData data = new SaveData
+        {
+            items = new List<InventoryManager.SaveItem>(),
+            money = 0
+        };
+
+        for (int i = 0; i < 10; i++)
+        {
+            data.items.Add(new InventoryManager.SaveItem
+            {
+                id = 0,
+                amount = 0
+            });
+        }
+
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(saveFilePath, json);
+
+        var inventoryManager = FindAnyObjectByType<InventoryManager>();
+        if (inventoryManager != null)
+        {
+            inventoryManager.Inventory = data.items;
+            inventoryManager.money = data.money;
+        }
+        SceneMove();
+        Debug.Log("✅ 새 게임 시작, 초기화 저장 완료");
+    }
+
+    public void SceneMove()
+    {
+        SceneManager.LoadScene(1);
     }
 }
