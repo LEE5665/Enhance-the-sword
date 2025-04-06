@@ -1,12 +1,22 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public int slotIndex;
     public Image icon;
     public TextMeshProUGUI amountText;
+
+    private InventoryManager inventory;
+    private GameObject ghostSlot;
+    private int draggedIndex = -1;
+
+    void Start()
+    {
+        inventory = FindAnyObjectByType<InventoryManager>();
+    }
 
     public void SetSlot(int index, InventoryManager.SaveItem item)
     {
@@ -15,6 +25,7 @@ public class InventorySlot : MonoBehaviour
         if (item.id == 0)
         {
             amountText.text = "";
+            icon.sprite = null;
             Color c;
             if (ColorUtility.TryParseHtmlString("#333333", out c))
             {
@@ -23,7 +34,7 @@ public class InventorySlot : MonoBehaviour
         }
         else
         {
-            ItemData data = FindAnyObjectByType<InventoryManager>()?.GetItemData(item.id);
+            ItemData data = inventory?.GetItemData(item.id);
 
             if (data != null)
             {
@@ -40,7 +51,6 @@ public class InventorySlot : MonoBehaviour
 
     public void OnClick()
     {
-        var inventory = FindAnyObjectByType<InventoryManager>();
         if (inventory == null) return;
 
         var item = inventory.Inventory[slotIndex];
@@ -48,7 +58,55 @@ public class InventorySlot : MonoBehaviour
         {
             var itemData = inventory.GetItemData(item.id);
             Debug.Log($"클릭한 슬롯 {slotIndex}: {itemData.itemName} x{item.amount}");
-            // 여기서 설명창 열기나 아이템 사용 등 처리 가능
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (inventory == null || icon.sprite == null) return;
+
+        // 드래그용 슬롯 복제
+        ghostSlot = Instantiate(gameObject, transform.root);
+        ghostSlot.transform.SetAsLastSibling();
+
+        CanvasGroup cg = ghostSlot.GetComponent<CanvasGroup>();
+        if (cg == null) cg = ghostSlot.AddComponent<CanvasGroup>();
+        cg.blocksRaycasts = false;
+
+        draggedIndex = slotIndex;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (ghostSlot != null)
+        {
+            ghostSlot.transform.position = Input.mousePosition;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (ghostSlot != null)
+        {
+            Destroy(ghostSlot);
+            ghostSlot = null;
+        }
+        draggedIndex = -1;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        InventorySlot draggedSlot = eventData.pointerDrag?.GetComponent<InventorySlot>();
+        if (draggedSlot != null && draggedSlot.draggedIndex != -1 && draggedSlot.draggedIndex != slotIndex)
+        {
+            var inventory = FindAnyObjectByType<InventoryManager>();
+            if (inventory != null)
+            {
+                var draggedItem = inventory.Inventory[draggedSlot.draggedIndex];
+                inventory.Inventory[draggedSlot.draggedIndex] = new InventoryManager.SaveItem { id = 0, amount = 0 };
+                inventory.Inventory[slotIndex] = draggedItem;
+                inventory.RefreshUI();
+            }
         }
     }
 }
