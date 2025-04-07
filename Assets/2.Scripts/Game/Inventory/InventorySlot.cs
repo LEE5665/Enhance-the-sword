@@ -58,6 +58,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             var itemData = inventory.GetItemData(item.id);
             Debug.Log($"클릭한 슬롯 {slotIndex}: {itemData.itemName} x{item.amount}");
+            inventory.SetDescription(itemData);
         }
     }
 

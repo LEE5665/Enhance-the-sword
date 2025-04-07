@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -11,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject slotPrefab;
     public Transform ParentObject;
     private List<GameObject> slotObjects = new List<GameObject>();
-
+    public TextMeshProUGUI textDescription;
 
     [System.Serializable]
     public class SaveItem
@@ -35,6 +36,11 @@ public class InventoryManager : MonoBehaviour
             }
         }
         RefreshUI();
+    }
+
+    public void SetDescription(ItemData data)
+    {
+        textDescription.text = $"{data.description}";
     }
 
     public void AddItemTest()
