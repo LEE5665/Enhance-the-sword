@@ -15,8 +15,8 @@ public class InventoryManager : MonoBehaviour
     private List<GameObject> slotObjects = new List<GameObject>();
     public TextMeshProUGUI textDescription;
 
-    public int InventorySelect = 0;
-    public int StoreSelect = 0;
+    public int InventorySelect = -1;
+    public int StoreSelect = -1;
     public TextMeshProUGUI moneyDisplay;
     public Button sellButton;
 
@@ -82,7 +82,7 @@ public class InventoryManager : MonoBehaviour
             slotObjects.Add(slotObj);
         }
         moneyDisplay.text = $"COIN : {money}";
-        
+
     }
 
     public void RefreshUI()

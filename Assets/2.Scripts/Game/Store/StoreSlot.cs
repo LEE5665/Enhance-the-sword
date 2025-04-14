@@ -20,7 +20,7 @@ public class StoreSlot : MonoBehaviour
         Store = FindAnyObjectByType<StoreManager>();
     }
 
-    public void Refresh()
+    public void Refresh(bool reset=false)
     {
         ItemData data = inventory?.GetItemData(itemid);
         if (data != null)
@@ -30,7 +30,6 @@ public class StoreSlot : MonoBehaviour
             if (ColorUtility.TryParseHtmlString("#FFFFFF", out var c))
                 icon.color = c;
         }
-
         if (inventory?.StoreSelect == slotIndex)
         {
             if (ColorUtility.TryParseHtmlString("#FFFC00", out var c))
@@ -41,7 +40,11 @@ public class StoreSlot : MonoBehaviour
             if (ColorUtility.TryParseHtmlString("#FFFFFF", out var c))
                 SelectBorder.color = c;
         }
-        Debug.Log(data);
+        if(reset)
+        {
+                if (ColorUtility.TryParseHtmlString("#FFFFFF", out var c))
+                SelectBorder.color = c;
+        }
     }
 
     public void OnClick()

@@ -50,14 +50,17 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 }
             }
         }
-        if(inventory?.InventorySelect == index) {
+        if (inventory?.InventorySelect == index)
+        {
             Color c;
             if (ColorUtility.TryParseHtmlString("#FFFC00", out c))
             {
                 SelectBorder.color = c;
             }
-        } else {
-                        Color c;
+        }
+        else
+        {
+            Color c;
             if (ColorUtility.TryParseHtmlString("#FFFFFF", out c))
             {
                 SelectBorder.color = c;
@@ -77,7 +80,9 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             inventory.SetDescription(itemData);
             inventory.InventorySelect = slotIndex;
             inventory.RefreshUI();
-        } else {
+        }
+        else
+        {
             inventory.InventorySelect = slotIndex;
             inventory.SetNullDescription();
             inventory.RefreshUI();
@@ -121,15 +126,21 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnDrop(PointerEventData eventData)
     {
         InventorySlot draggedSlot = eventData.pointerDrag?.GetComponent<InventorySlot>();
+
         if (draggedSlot != null && draggedSlot.draggedIndex != -1 && draggedSlot.draggedIndex != slotIndex)
         {
             var inventory = FindAnyObjectByType<InventoryManager>();
             if (inventory != null)
             {
-                var draggedItem = inventory.Inventory[draggedSlot.draggedIndex];
-                inventory.Inventory[draggedSlot.draggedIndex] = new InventoryManager.SaveItem { id = 0, amount = 0 };
-                inventory.Inventory[slotIndex] = draggedItem;
+                // 🔁 아이템 스왑
+                var temp = inventory.Inventory[slotIndex];
+                inventory.Inventory[slotIndex] = inventory.Inventory[draggedSlot.draggedIndex];
+                inventory.Inventory[draggedSlot.draggedIndex] = temp;
+
+                // 선택 인덱스 업데이트 (원하면)
                 inventory.InventorySelect = slotIndex;
+
+                // UI 갱신
                 inventory.RefreshUI();
             }
         }
