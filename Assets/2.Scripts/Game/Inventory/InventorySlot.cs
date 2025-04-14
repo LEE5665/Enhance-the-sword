@@ -7,11 +7,13 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public int slotIndex;
     public Image icon;
+    public Image SelectBorder;
     public TextMeshProUGUI amountText;
 
     private InventoryManager inventory;
     private GameObject ghostSlot;
     private int draggedIndex = -1;
+    private int itemid;
 
     void Start()
     {
@@ -38,6 +40,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
             if (data != null)
             {
+                itemid = item.id;
                 icon.sprite = data.icon;
                 amountText.text = item.amount.ToString();
                 Color c;
@@ -45,6 +48,19 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 {
                     icon.color = c;
                 }
+            }
+        }
+        if(inventory?.InventorySelect == index) {
+            Color c;
+            if (ColorUtility.TryParseHtmlString("#FFFC00", out c))
+            {
+                SelectBorder.color = c;
+            }
+        } else {
+                        Color c;
+            if (ColorUtility.TryParseHtmlString("#FFFFFF", out c))
+            {
+                SelectBorder.color = c;
             }
         }
     }
@@ -59,6 +75,12 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             var itemData = inventory.GetItemData(item.id);
             Debug.Log($"클릭한 슬롯 {slotIndex}: {itemData.itemName} x{item.amount}");
             inventory.SetDescription(itemData);
+            inventory.InventorySelect = slotIndex;
+            inventory.RefreshUI();
+        } else {
+            inventory.InventorySelect = slotIndex;
+            inventory.SetNullDescription();
+            inventory.RefreshUI();
         }
     }
 
@@ -75,6 +97,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         cg.blocksRaycasts = false;
 
         draggedIndex = slotIndex;
+        inventory.SetDescription(inventory.GetItemData(itemid));
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -106,6 +129,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 var draggedItem = inventory.Inventory[draggedSlot.draggedIndex];
                 inventory.Inventory[draggedSlot.draggedIndex] = new InventoryManager.SaveItem { id = 0, amount = 0 };
                 inventory.Inventory[slotIndex] = draggedItem;
+                inventory.InventorySelect = slotIndex;
                 inventory.RefreshUI();
             }
         }
