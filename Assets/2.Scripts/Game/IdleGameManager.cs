@@ -7,7 +7,6 @@ public class IdleGameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI CoinText;
     [SerializeField] private int Coin = 0;
-    private int ClickCoin = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,7 +24,8 @@ public class IdleGameManager : MonoBehaviour
 
     public void AddClickCoin()
     {
-        Coin += ClickCoin;
+        
+        Coin += UpgradeManager.Instance.Upgrades["Click"] * 10;
         CoinUpdate();
         Debug.Log("눌렀어");
     }
