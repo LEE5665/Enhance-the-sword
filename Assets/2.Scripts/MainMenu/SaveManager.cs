@@ -99,12 +99,6 @@ public class SaveManager : MonoBehaviour
             inventoryManager.Inventory = data.items;
             inventoryManager.money = data.money;
         }
-        SceneMove();
         Debug.Log("✅ 새 게임 시작, 초기화 저장 완료");
-    }
-
-    public void SceneMove()
-    {
-        SceneManager.LoadScene(1);
     }
 }

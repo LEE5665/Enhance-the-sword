@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class IdleGameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI CoinText;
-    [SerializeField] private int Coin = 0;
+    InventoryManager Inventory;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Inventory = FindAnyObjectByType<InventoryManager>();
     }
 
     // Update is called once per frame
@@ -19,26 +20,25 @@ public class IdleGameManager : MonoBehaviour
 
     void CoinUpdate()
     {
-        CoinText.text = "COIN : " + Coin;
+        Inventory.MoneyDIsplayUpdate();
     }
 
     public void AddClickCoin()
     {
-        
-        Coin += UpgradeManager.Instance.Upgrades["Click"] * 10;
+        Inventory.money += UpgradeManager.Instance.Upgrades["Click"] * 10;
         CoinUpdate();
         Debug.Log("눌렀어");
     }
 
     public void AddCoin(int Co)
     {
-        Coin += Co;
+        Inventory.money += Co;
         CoinUpdate();
     }
 
     public void SubCoin(int Co)
     {
-        Coin -= Co;
+        Inventory.money -= Co;
         CoinUpdate();
     }
 }

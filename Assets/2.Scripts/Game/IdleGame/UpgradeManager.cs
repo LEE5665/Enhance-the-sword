@@ -28,29 +28,45 @@ public class UpgradeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         upgradeSavePath = Path.Combine(Application.persistentDataPath, "upgrade_save.json");
-        LoadOrCreateUpgradeData();
+
+        MainMenuSelectManager Save = FindAnyObjectByType<MainMenuSelectManager>();
+        if (Save != null)
+        {
+            if (Save.startState == 0) {
+                NewGame();
+            } else {
+                LoadGame();
+            }
+        } else {
+            NewGame();
+        }
     }
 
-    private void LoadOrCreateUpgradeData()
+    private void LoadGame()
     {
         if (File.Exists(upgradeSavePath))
         {
             string json = File.ReadAllText(upgradeSavePath);
             UpgradeData data = JsonConvert.DeserializeObject<UpgradeData>(json);
             Upgrades = data.upgrades;
-            Debug.Log("✅ 업그레이드 데이터 불러옴");
+            Debug.Log("업그레이드 데이터 불러옴");
         }
         else
         {
-            // 기본값 세팅
-            Upgrades = new Dictionary<string, int>
-            {
-                { "Click", 1 },
-                { "Miner", 0 }
-            };
-            SaveUpgradeData();
-            Debug.Log("🆕 업그레이드 데이터 새로 생성");
+            Debug.LogWarning("업그레이드 데이터가 없어서 로드 실패. NewGame()을 호출하세요.");
         }
+    }
+
+    private void NewGame()
+    {
+        // 기본값 세팅
+        Upgrades = new Dictionary<string, int>
+    {
+        { "Click", 1 },
+        { "Miner", 0 }
+    };
+        SaveUpgradeData();
+        Debug.Log("업그레이드 데이터 새로 생성");
     }
 
     public void SaveUpgradeData()
@@ -68,12 +84,12 @@ public class UpgradeManager : MonoBehaviour
         if (Upgrades.ContainsKey(myName))
         {
             Upgrades[myName]++;
-            Debug.Log($"🔼 {myName} 업그레이드 레벨: {Upgrades[myName]}");
+            Debug.Log($"{myName} 업그레이드 레벨: {Upgrades[myName]}.");
         }
         else
         {
             Upgrades.Add(myName, 1);
-            Debug.Log($"🆕 {myName} 새로 등록: {Upgrades[myName]}");
+            Debug.Log($"{myName} 새로 등록: {Upgrades[myName]}");
         }
 
         SaveUpgradeData();

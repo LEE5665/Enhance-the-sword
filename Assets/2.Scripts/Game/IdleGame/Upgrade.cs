@@ -17,7 +17,7 @@ public class Upgrade : MonoBehaviour
         if (UpgradeManager.Instance.Upgrades.ContainsKey(myName))
         {
             UpgradeManager.Instance.Upgrades[myName]++;
-            Debug.Log($"🔼 {myName} 업그레이드 레벨: {UpgradeManager.Instance.Upgrades[myName]}");
+            Debug.Log($"{myName} 업그레이드 레벨: {UpgradeManager.Instance.Upgrades[myName]}");
             LvText.text = $"Lv{UpgradeManager.Instance.Upgrades[myName]}";
         }
         else

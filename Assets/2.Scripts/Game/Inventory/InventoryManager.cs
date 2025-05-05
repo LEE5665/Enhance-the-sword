@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using System.IO;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -20,12 +22,81 @@ public class InventoryManager : MonoBehaviour
     public TextMeshProUGUI moneyDisplay;
     public Button sellButton;
 
+    private string saveFilePath;
+
+    private void Awake()
+    {
+        saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
+        MainMenuSelectManager Save = FindAnyObjectByType<MainMenuSelectManager>();
+        if (Save != null)
+        {
+            if (Save.startState == 0)
+            {
+                NewGame();
+            }
+            else
+            {
+                LoadGame();
+            }
+        }
+        else
+        {
+            NewGame();
+        }
+    }
+
 
     [System.Serializable]
     public class SaveItem
     {
         public int id;
         public int amount;
+    }
+
+    public void LoadGame()
+    {
+        if (!File.Exists(saveFilePath))
+        {
+            Debug.LogWarning("저장 파일 없음");
+            return;
+        }
+
+        string json = File.ReadAllText(saveFilePath);
+        SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
+
+        Inventory = data.items;
+        money = data.money;
+
+        Debug.Log("✅ 불러오기 완료");
+    }
+
+    public void NewGame()
+    {
+        SaveData data = new SaveData
+        {
+            items = new List<SaveItem>(),
+            money = 0
+        };
+
+        for (int i = 0; i < 10; i++)
+        {
+            data.items.Add(new SaveItem
+            {
+                id = 0,
+                amount = 0
+            });
+        }
+
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(saveFilePath, json);
+
+        var inventoryManager = FindAnyObjectByType<InventoryManager>();
+        if (inventoryManager != null)
+        {
+            inventoryManager.Inventory = data.items;
+            inventoryManager.money = data.money;
+        }
+        Debug.Log("새 게임 시작, 초기화 저장 완료");
     }
 
     public void AddItem(int id, int amount = 1)
@@ -66,12 +137,6 @@ public class InventoryManager : MonoBehaviour
         return itemDatabase.GetItemById(id);
     }
 
-
-    void Awake()
-    {
-        SaveManager.Instance.LoadGame();
-    }
-
     void Start()
     {
         for (int i = 0; i < Inventory.Count; i++)
@@ -81,8 +146,13 @@ public class InventoryManager : MonoBehaviour
             slot.SetSlot(i, Inventory[i]);
             slotObjects.Add(slotObj);
         }
-        moneyDisplay.text = $"COIN : {money}";
+        MoneyDIsplayUpdate();
 
+    }
+
+    public void MoneyDIsplayUpdate()
+    {
+        moneyDisplay.text = $"COIN : {money}";
     }
 
     public void RefreshUI()
@@ -113,34 +183,34 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void SellSelectedItem()
-{
-    var selectedItem = Inventory[InventorySelect];
-
-    if (selectedItem.id == 0)
     {
-        Debug.Log("빈 슬롯입니다.");
-        return;
-    }
+        var selectedItem = Inventory[InventorySelect];
 
-    var itemData = GetItemData(selectedItem.id);
-    if (itemData == null)
-    {
-        Debug.LogWarning("아이템 데이터가 없습니다.");
-        return;
-    }
+        if (selectedItem.id == 0)
+        {
+            Debug.Log("빈 슬롯입니다.");
+            return;
+        }
 
-    money += itemData.sell;
-    selectedItem.amount -= 1;
+        var itemData = GetItemData(selectedItem.id);
+        if (itemData == null)
+        {
+            Debug.LogWarning("아이템 데이터가 없습니다.");
+            return;
+        }
 
-    if (selectedItem.amount <= 0)
-    {
-        SetNullDescription();
-        selectedItem.id = 0;
-        selectedItem.amount = 0;
+        money += itemData.sell;
+        selectedItem.amount -= 1;
+
+        if (selectedItem.amount <= 0)
+        {
+            SetNullDescription();
+            selectedItem.id = 0;
+            selectedItem.amount = 0;
+        }
+        moneyDisplay.text = $"COIN : {money}";
+        RefreshUI();
+        // 설명 초기화 또는 필요 시 유지
+        Debug.Log($"{itemData.itemName} 판매 완료. 남은 수량: {selectedItem.amount}, 현재 소지금: {money}");
     }
-    moneyDisplay.text = $"COIN : {money}";
-    RefreshUI();
-     // 설명 초기화 또는 필요 시 유지
-    Debug.Log($"{itemData.itemName} 판매 완료. 남은 수량: {selectedItem.amount}, 현재 소지금: {money}");
-}
 }
