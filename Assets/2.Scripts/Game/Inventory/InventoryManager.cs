@@ -64,6 +64,18 @@ public class InventoryManager : MonoBehaviour
         public int amount;
     }
 
+    public void SaveInventoryData()
+{
+    SaveData data = new SaveData
+    {
+        items = Inventory,
+        money = money
+    };
+
+    string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+    File.WriteAllText(saveFilePath, json);
+}
+
     public void LoadGame()
     {
         if (!File.Exists(saveFilePath))
@@ -97,6 +109,8 @@ public class InventoryManager : MonoBehaviour
                 amount = 0
             });
         }
+
+
 
         string json = JsonConvert.SerializeObject(data, Formatting.Indented);
         File.WriteAllText(saveFilePath, json);
@@ -140,7 +154,11 @@ public class InventoryManager : MonoBehaviour
     public void AddItemTest()
     {
         AddItem(1, 1);
-
+    }
+    public void AddMoneyTest()
+    {
+        money += 1000000;
+        MoneyDIsplayUpdate();
     }
 
     public ItemData GetItemData(int id)
