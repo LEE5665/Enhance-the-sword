@@ -22,10 +22,21 @@ public class InventoryManager : MonoBehaviour
     public TextMeshProUGUI moneyDisplay;
     public Button sellButton;
 
+    public static InventoryManager Instance { get; private set; }
+
     private string saveFilePath;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
         MainMenuSelectManager Save = FindAnyObjectByType<MainMenuSelectManager>();
         if (Save != null)

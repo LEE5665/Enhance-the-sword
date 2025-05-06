@@ -63,7 +63,6 @@ public class UpgradeManager : MonoBehaviour
         Upgrades = new Dictionary<string, int>
     {
         { "Click", 1 },
-        { "Miner", 0 }
     };
         SaveUpgradeData();
         Debug.Log("업그레이드 데이터 새로 생성");
@@ -88,7 +87,7 @@ public class UpgradeManager : MonoBehaviour
         }
         else
         {
-            Upgrades.Add(myName, 1);
+            Upgrades.Add(myName, 0);
             Debug.Log($"{myName} 새로 등록: {Upgrades[myName]}");
         }
 
