@@ -18,6 +18,8 @@ public class StoreSlot : MonoBehaviour
     {
         inventory = FindAnyObjectByType<InventoryManager>();
         Store = FindAnyObjectByType<StoreManager>();
+        Store.StoreSlots = Store.storeSlotParent.GetComponentsInChildren<StoreSlot>();
+        Store.RefreshStoreUI(true);
     }
 
     public void Refresh(bool reset=false)

@@ -4,17 +4,17 @@ using System.Collections;
 
 public class StoreManager : MonoBehaviour
 {
-    [SerializeField] private Transform storeSlotParent;
-    private StoreSlot[] StoreSlots;
+    [SerializeField] public Transform storeSlotParent;
+    public StoreSlot[] StoreSlots;
     public TextMeshProUGUI textDescription;
 
-    IEnumerator Start()
-    {
-        yield return null;
-        StoreSlots = storeSlotParent.GetComponentsInChildren<StoreSlot>(true);
-        Debug.Log("있나?");
-        RefreshStoreUI(true);
-    }
+    // IEnumerator Start()
+    // {
+    //     yield return null;
+    //     StoreSlots = storeSlotParent.GetComponentsInChildren<StoreSlot>(true);
+    //     Debug.Log("있나?");
+    //     RefreshStoreUI(true);
+    // }
     public void RefreshStoreUI(bool reset = false)
     {
         for (int i = 0; i < StoreSlots.Length; i++)

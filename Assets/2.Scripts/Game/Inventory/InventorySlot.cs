@@ -18,6 +18,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void Start()
     {
         inventory = FindAnyObjectByType<InventoryManager>();
+        inventory.RefreshUI();
     }
 
     public void SetSlot(int index, InventoryManager.SaveItem item)

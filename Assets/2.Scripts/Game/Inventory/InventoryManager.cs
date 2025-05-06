@@ -89,8 +89,8 @@ public class InventoryManager : MonoBehaviour
 
         Inventory = data.items;
         money = data.money;
-
-        Debug.Log("✅ 불러오기 완료");
+        RefreshUI();
+        Debug.Log("불러오기 완료");
     }
 
     public void NewGame()
