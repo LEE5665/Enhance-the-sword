@@ -9,4 +9,6 @@ public class ItemData : ScriptableObject
     public string description;
     public int buy;
     public int sell;
+    public string type;
+    public int upgrade;
 }

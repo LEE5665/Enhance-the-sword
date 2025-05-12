@@ -73,6 +73,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (inventory == null) return;
 
+        UpgradeSlotManager.Instance.ClearSelectedIndex();
         var item = inventory.Inventory[slotIndex];
         if (item.id != 0)
         {
@@ -81,11 +82,15 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             inventory.SetDescription(itemData);
             inventory.InventorySelect = slotIndex;
             inventory.RefreshUI();
+            if(itemData.type == "use") {
+                inventory.UseButtonOnOff(true);
+            }
         }
         else
         {
             inventory.InventorySelect = slotIndex;
             inventory.SetNullDescription();
+            inventory.UseButtonOnOff(false);
             inventory.RefreshUI();
         }
     }
@@ -133,7 +138,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             var inventory = FindAnyObjectByType<InventoryManager>();
             if (inventory != null)
             {
-                // 🔁 아이템 스왑
+                // 아이템 스왑
                 var temp = inventory.Inventory[slotIndex];
                 inventory.Inventory[slotIndex] = inventory.Inventory[draggedSlot.draggedIndex];
                 inventory.Inventory[draggedSlot.draggedIndex] = temp;

@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b07495572890a204d88ee6eacffaf8ae, type: 3}
-  m_Name: 1.TestSword
+  m_Name: TestUseItem
   m_EditorClassIdentifier: 
-  ID: 11
-  itemName: "\uD3C9\uBC94\uD55C \uAC80"
-  icon: {fileID: 5342282718528360277, guid: d7e13350dfdea3d498d3da4843124a16, type: 3}
-  description: "\uADF8\uB0E5 \uAC80."
+  ID: 101
+  itemName: "\uD14C\uC2A4\uD2B8\uC0C1\uC810\uC544\uC774\uD15C"
+  icon: {fileID: 1945416283, guid: 18ecfe034a0a41046ade560c2b2a84fc, type: 3}
+  description: "\uD14C\uC2A4\uD2B8\uC0AC\uC6A9\uAC00\uC544\uC774\uD15C"
   buy: 100
-  sell: 90
+  sell: 100
+  type: use
+  upgrade: 0

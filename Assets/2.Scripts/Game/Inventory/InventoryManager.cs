@@ -21,6 +21,8 @@ public class InventoryManager : MonoBehaviour
     public int StoreSelect = -1;
     public TextMeshProUGUI moneyDisplay;
     public Button sellButton;
+    public Button useButton;
+    public TextMeshProUGUI useButtonText;
 
     public static InventoryManager Instance { get; private set; }
 
@@ -65,16 +67,16 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void SaveInventoryData()
-{
-    SaveData data = new SaveData
     {
-        items = Inventory,
-        money = money
-    };
+        SaveData data = new SaveData
+        {
+            items = Inventory,
+            money = money
+        };
 
-    string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-    File.WriteAllText(saveFilePath, json);
-}
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(saveFilePath, json);
+    }
 
     public void LoadGame()
     {
@@ -126,19 +128,33 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(int id, int amount = 1)
     {
-        var item = Inventory.Find(i => i.id == id);
-        if (item != null && item.id != 0)
-            item.amount += amount;
-        else
+        int usableSlotCount = Inventory.Count;
+
+        // 먼저, 기존 슬롯 중 같은 아이템이 있는지 확인
+        for (int i = 0; i < usableSlotCount; i++)
         {
-            var emptySlot = Inventory.Find(i => i.id == 0);
-            if (emptySlot != null)
+            if (Inventory[i].id == id)
             {
-                emptySlot.id = id;
-                emptySlot.amount = amount;
+                Inventory[i].amount += amount;
+                RefreshUI();
+                return;
             }
         }
-        RefreshUI();
+
+        // 빈 슬롯에 새로 추가
+        for (int i = 0; i < usableSlotCount; i++)
+        {
+            if (Inventory[i].id == 0)
+            {
+                Inventory[i].id = id;
+                Inventory[i].amount = amount;
+                RefreshUI();
+                return;
+            }
+        }
+
+        // 꽉 차 있으면 추가 불가
+        Debug.LogWarning("인벤토리가 가득 찼습니다. 아이템을 추가할 수 없습니다.");
     }
 
     public void SetDescription(ItemData data, int n = 0)
@@ -210,6 +226,12 @@ public class InventoryManager : MonoBehaviour
     {
         sellButton.gameObject.SetActive(onoff);
     }
+    public void UseButtonOnOff(bool onoff)
+    {
+        useButton.gameObject.SetActive(onoff);
+        useButtonText.text = "Use";
+    }
+
 
     public void SellSelectedItem()
     {
@@ -242,4 +264,53 @@ public class InventoryManager : MonoBehaviour
         // 설명 초기화 또는 필요 시 유지
         Debug.Log($"{itemData.itemName} 판매 완료. 남은 수량: {selectedItem.amount}, 현재 소지금: {money}");
     }
+
+public void UseSelectedItem()
+{
+    if(useButtonText.text == "Remove")
+    {
+        UpgradeSlotManager.Instance.RemoveSelectedItem();
+        return;
+    }
+    if (InventorySelect < 0 || InventorySelect >= Inventory.Count)
+    {
+        Debug.LogWarning("선택된 인벤토리 슬롯이 없습니다.");
+        return;
+    }
+
+    var selectedItem = Inventory[InventorySelect];
+    if (selectedItem.id == 0)
+    {
+        Debug.Log("빈 슬롯입니다.");
+        return;
+    }
+
+    var itemData = GetItemData(selectedItem.id);
+    if (itemData == null)
+    {
+        Debug.LogWarning("아이템 데이터가 없습니다.");
+        return;
+    }
+
+    // 업그레이드 슬롯에 추가 시도
+    bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
+    if (!added)
+    {
+        Debug.LogWarning("업그레이드 슬롯에 추가 실패 (중복 또는 슬롯 없음)");
+        return;
+    }
+
+    // 인벤토리에서 1개 제거
+    selectedItem.amount -= 1;
+    if (selectedItem.amount <= 0)
+    {
+        selectedItem.id = 0;
+        selectedItem.amount = 0;
+        SetNullDescription();
+    }
+
+    RefreshUI();
+    Debug.Log($"{itemData.itemName}를 업그레이드 슬롯으로 이동");
+}
+
 }
