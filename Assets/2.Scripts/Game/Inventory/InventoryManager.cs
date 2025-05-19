@@ -23,6 +23,7 @@ public class InventoryManager : MonoBehaviour
     public Button sellButton;
     public Button useButton;
     public TextMeshProUGUI useButtonText;
+    public Button upgradeButton;
 
     public static InventoryManager Instance { get; private set; }
 
@@ -231,7 +232,10 @@ public class InventoryManager : MonoBehaviour
         useButton.gameObject.SetActive(onoff);
         useButtonText.text = "Use";
     }
-
+    public void UpgradeButtonOnOff(bool onoff)
+    {
+        upgradeButton.interactable = onoff;
+    }
 
     public void SellSelectedItem()
     {

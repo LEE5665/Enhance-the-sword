@@ -84,6 +84,13 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             inventory.RefreshUI();
             if(itemData.type == "use") {
                 inventory.UseButtonOnOff(true);
+            } else {
+                inventory.UseButtonOnOff(false);
+            }
+            if(itemData.type == "upgradeItem") {
+                inventory.UpgradeButtonOnOff(true);
+            } else {
+                inventory.UpgradeButtonOnOff(false);
             }
         }
         else
@@ -91,6 +98,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             inventory.InventorySelect = slotIndex;
             inventory.SetNullDescription();
             inventory.UseButtonOnOff(false);
+            inventory.UpgradeButtonOnOff(false);
             inventory.RefreshUI();
         }
     }
