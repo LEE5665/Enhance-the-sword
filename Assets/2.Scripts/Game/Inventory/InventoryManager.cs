@@ -300,6 +300,7 @@ public void UseSelectedItem()
     bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
     if (!added)
     {
+        UIManager.Instance.ShowNotice("강화 아이템을 중복으로 사용 할 수 없습니다.");
         Debug.LogWarning("업그레이드 슬롯에 추가 실패 (중복 또는 슬롯 없음)");
         return;
     }

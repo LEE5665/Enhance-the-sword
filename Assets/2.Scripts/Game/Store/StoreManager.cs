@@ -75,6 +75,7 @@ public class StoreManager : MonoBehaviour
 
         if (inventory.money < itemData.sell)
         {
+            UIManager.Instance.ShowNotice("돈이 부족합니다.");
             Debug.Log("돈이 부족합니다!");
             return;
         }
