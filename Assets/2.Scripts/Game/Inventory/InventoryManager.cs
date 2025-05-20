@@ -269,53 +269,69 @@ public class InventoryManager : MonoBehaviour
         Debug.Log($"{itemData.itemName} 판매 완료. 남은 수량: {selectedItem.amount}, 현재 소지금: {money}");
     }
 
-public void UseSelectedItem()
-{
-    if(useButtonText.text == "Remove")
+    public void UseSelectedItem()
     {
-        UpgradeSlotManager.Instance.RemoveSelectedItem();
-        return;
+        if (useButtonText.text == "Remove")
+        {
+            UpgradeSlotManager.Instance.RemoveSelectedItem();
+            UpgradeDescription();
+            return;
+        }
+        if (InventorySelect < 0 || InventorySelect >= Inventory.Count)
+        {
+            Debug.LogWarning("선택된 인벤토리 슬롯이 없습니다.");
+            return;
+        }
+
+        var selectedItem = Inventory[InventorySelect];
+        if (selectedItem.id == 0)
+        {
+            Debug.Log("빈 슬롯입니다.");
+            return;
+        }
+
+        var itemData = GetItemData(selectedItem.id);
+        if (itemData == null)
+        {
+            Debug.LogWarning("아이템 데이터가 없습니다.");
+            return;
+        }
+
+        // 업그레이드 슬롯에 추가 시도
+        bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
+        if (!added)
+        {
+            UIManager.Instance.ShowNotice("강화 아이템을 중복으로 사용 할 수 없습니다.");
+            Debug.LogWarning("업그레이드 슬롯에 추가 실패 (중복 또는 슬롯 없음)");
+            return;
+        }
+
+        // 인벤토리에서 1개 제거
+        selectedItem.amount -= 1;
+        if (selectedItem.amount <= 0)
+        {
+            selectedItem.id = 0;
+            selectedItem.amount = 0;
+            SetNullDescription();
+        }
+        UpgradeDescription();
+        RefreshUI();
+        Debug.Log($"{itemData.itemName}를 업그레이드 슬롯으로 이동");
     }
-    if (InventorySelect < 0 || InventorySelect >= Inventory.Count)
+    public void UpgradeDescription()
     {
-        Debug.LogWarning("선택된 인벤토리 슬롯이 없습니다.");
-        return;
+                string descriptionText = "";
+        foreach (var slot in UpgradeSlotManager.Instance.upgradeSlots)
+        {
+            if (slot.id != 0)
+            {
+                var data = GetItemData(slot.id);
+                if (data != null)
+                {
+                    descriptionText += data.itemName + "\n";
+                }
+            }
+        }
+        UpgradeManager.Instance.SetUpgradeDescription(descriptionText);
     }
-
-    var selectedItem = Inventory[InventorySelect];
-    if (selectedItem.id == 0)
-    {
-        Debug.Log("빈 슬롯입니다.");
-        return;
-    }
-
-    var itemData = GetItemData(selectedItem.id);
-    if (itemData == null)
-    {
-        Debug.LogWarning("아이템 데이터가 없습니다.");
-        return;
-    }
-
-    // 업그레이드 슬롯에 추가 시도
-    bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
-    if (!added)
-    {
-        UIManager.Instance.ShowNotice("강화 아이템을 중복으로 사용 할 수 없습니다.");
-        Debug.LogWarning("업그레이드 슬롯에 추가 실패 (중복 또는 슬롯 없음)");
-        return;
-    }
-
-    // 인벤토리에서 1개 제거
-    selectedItem.amount -= 1;
-    if (selectedItem.amount <= 0)
-    {
-        selectedItem.id = 0;
-        selectedItem.amount = 0;
-        SetNullDescription();
-    }
-
-    RefreshUI();
-    Debug.Log($"{itemData.itemName}를 업그레이드 슬롯으로 이동");
-}
-
 }

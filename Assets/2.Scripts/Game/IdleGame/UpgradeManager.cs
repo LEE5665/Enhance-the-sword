@@ -2,9 +2,11 @@ using UnityEngine;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
+using TMPro;
 
 public class UpgradeManager : MonoBehaviour
 {
+    public TextMeshProUGUI upgradeDescription;
     [System.Serializable]
     public class UpgradeData
     {
@@ -32,12 +34,17 @@ public class UpgradeManager : MonoBehaviour
         MainMenuSelectManager Save = FindAnyObjectByType<MainMenuSelectManager>();
         if (Save != null)
         {
-            if (Save.startState == 0) {
+            if (Save.startState == 0)
+            {
                 NewGame();
-            } else {
+            }
+            else
+            {
                 LoadGame();
             }
-        } else {
+        }
+        else
+        {
             NewGame();
         }
     }
@@ -92,5 +99,10 @@ public class UpgradeManager : MonoBehaviour
         }
 
         SaveUpgradeData();
+    }
+
+    public void SetUpgradeDescription(string text)
+    {
+        upgradeDescription.text = text;
     }
 }

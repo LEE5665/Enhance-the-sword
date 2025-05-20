@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b07495572890a204d88ee6eacffaf8ae, type: 3}
-  m_Name: TestUseItem
+  m_Name: TestDepensiveItem
   m_EditorClassIdentifier: 
-  ID: 101
-  itemName: "\uAC15\uD654 \uD655\uB960 10% \uC99D\uAC00"
-  icon: {fileID: 1945416283, guid: 18ecfe034a0a41046ade560c2b2a84fc, type: 3}
-  description: "\uAC15\uD654 \uD655\uB960\uC774 10% \uC99D\uAC00\uD55C\uB2E4. (\uB2E4\uB978
-    \uAC15\uD654 \uC544\uC774\uD15C\uACFC \uC911\uBCF5 \uAC00\uB2A5)"
-  buy: 100
-  sell: 100
+  ID: 100
+  itemName: "\uAC15\uD654 \uC2E4\uD328 \uBC29\uC5B4\uAD8C"
+  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  description: "\uAC15\uD654 \uC2E4\uD328 \uC2DC 1\uD68C \uBC29\uC5B4\uB418\uB294
+    \uC544\uC774\uD15C"
+  buy: 10000
+  sell: 10000
   type: use
   upgrade: 0
