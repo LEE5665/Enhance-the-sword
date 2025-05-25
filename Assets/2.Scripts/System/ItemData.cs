@@ -11,4 +11,5 @@ public class ItemData : ScriptableObject
     public int sell;
     public string type;
     public int upgrade;
+    public int upgradeCost;
 }

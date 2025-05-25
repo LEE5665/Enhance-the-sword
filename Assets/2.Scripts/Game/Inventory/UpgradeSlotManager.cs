@@ -75,32 +75,32 @@ public class UpgradeSlotManager : MonoBehaviour
         RefreshUpgradeUI();
         Debug.Log("업그레이드 슬롯 불러오기 완료");
     }
-public bool TryAddItem(InventoryManager.SaveItem item)
-{
-    // 슬롯당 1개 제한, 중복 아이템 금지
-    for (int i = 0; i < upgradeSlots.Length; i++)
+    public bool TryAddItem(InventoryManager.SaveItem item)
     {
-        if (upgradeSlots[i].id == item.id)
+        // 슬롯당 1개 제한, 중복 아이템 금지
+        for (int i = 0; i < upgradeSlots.Length; i++)
         {
-            Debug.Log("이미 동일한 아이템이 업그레이드 슬롯에 존재합니다.");
-            return false;
+            if (upgradeSlots[i].id == item.id)
+            {
+                Debug.Log("이미 동일한 아이템이 업그레이드 슬롯에 존재합니다.");
+                return false;
+            }
         }
-    }
 
-    for (int i = 0; i < upgradeSlots.Length; i++)
-    {
-        if (upgradeSlots[i].id == 0)
+        for (int i = 0; i < upgradeSlots.Length; i++)
         {
-            upgradeSlots[i].id = item.id;
-            upgradeSlots[i].amount = 1;
-            RefreshUpgradeUI();
-            return true;
+            if (upgradeSlots[i].id == 0)
+            {
+                upgradeSlots[i].id = item.id;
+                upgradeSlots[i].amount = 1;
+                RefreshUpgradeUI();
+                return true;
+            }
         }
-    }
 
-    Debug.Log("모든 업그레이드 슬롯이 가득 찼습니다.");
-    return false;
-}
+        Debug.Log("모든 업그레이드 슬롯이 가득 찼습니다.");
+        return false;
+    }
 
     public void RefreshUpgradeUI()
     {
@@ -116,36 +116,48 @@ public bool TryAddItem(InventoryManager.SaveItem item)
     }
 
     public void ClearSelectedIndex()
-{
-    selectedIndex = -1;
-    RefreshUpgradeUI();
-}
-public void RemoveSelectedItem()
-{
-    if (selectedIndex < 0 || selectedIndex >= upgradeSlots.Length)
     {
-        Debug.LogWarning("선택된 업그레이드 슬롯이 없습니다.");
-        return;
+        selectedIndex = -1;
+        RefreshUpgradeUI();
+    }
+    public void RemoveSelectedItem()
+    {
+        if (selectedIndex < 0 || selectedIndex >= upgradeSlots.Length)
+        {
+            Debug.LogWarning("선택된 업그레이드 슬롯이 없습니다.");
+            return;
+        }
+
+        var slot = upgradeSlots[selectedIndex];
+        if (slot.id == 0)
+        {
+            Debug.LogWarning("선택된 슬롯이 비어 있습니다.");
+            return;
+        }
+
+        // 인벤토리에 아이템 1개 추가
+        InventoryManager.Instance.AddItem(slot.id, 1);
+
+        // 해당 슬롯 비우기
+        upgradeSlots[selectedIndex].id = 0;
+        upgradeSlots[selectedIndex].amount = 0;
+
+        // 선택 해제 및 UI 갱신
+        selectedIndex = -1;
+        RefreshUpgradeUI();
+
+        Debug.Log("업그레이드 슬롯에서 아이템을 해제하고 인벤토리로 반환했습니다.");
     }
 
-    var slot = upgradeSlots[selectedIndex];
-    if (slot.id == 0)
+    public void ClearAllUpgradeSlots()
     {
-        Debug.LogWarning("선택된 슬롯이 비어 있습니다.");
-        return;
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        {
+            upgradeSlots[i].id = 0;
+            upgradeSlots[i].amount = 0;
+        }
+        selectedIndex = -1;
+        RefreshUpgradeUI();
+        Debug.Log("업그레이드 슬롯 비움 완료");
     }
-
-    // 인벤토리에 아이템 1개 추가
-    InventoryManager.Instance.AddItem(slot.id, 1);
-
-    // 해당 슬롯 비우기
-    upgradeSlots[selectedIndex].id = 0;
-    upgradeSlots[selectedIndex].amount = 0;
-
-    // 선택 해제 및 UI 갱신
-    selectedIndex = -1;
-    RefreshUpgradeUI();
-
-    Debug.Log("업그레이드 슬롯에서 아이템을 해제하고 인벤토리로 반환했습니다.");
-}
 }

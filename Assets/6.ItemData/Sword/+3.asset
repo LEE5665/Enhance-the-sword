@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b07495572890a204d88ee6eacffaf8ae, type: 3}
-  m_Name: 1.Default Sword
+  m_Name: +3
   m_EditorClassIdentifier: 
-  ID: 200
-  itemName: "\uD3C9\uBC94\uD55C \uAC80"
+  ID: 203
+  itemName: "\uD3C9\uBC94\uD55C \uAC80 +3"
   icon: {fileID: 5342282718528360277, guid: d7e13350dfdea3d498d3da4843124a16, type: 3}
   description: "\uADF8\uB0E5 \uAC80."
   buy: 100
   sell: 90
   type: upgradeItem
-  upgrade: 90
+  upgrade: 75
   upgradeCost: 1000

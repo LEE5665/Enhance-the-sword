@@ -1329,7 +1329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3379945490204756264, guid: dadf39e359c83cd4ea7bf8289613818b, type: 3}
       propertyPath: itemid
-      value: 11
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3427381589050892001, guid: dadf39e359c83cd4ea7bf8289613818b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3431,7 +3431,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 700482387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1609930558}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: ItemUpgradeClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &700482387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4112,7 +4124,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1175026959}
   m_Direction: 2
   m_Value: 1.0000007
-  m_Size: 0.6806775
+  m_Size: 0.68067753
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4347,7 +4359,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2119944312}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9065,7 +9077,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2053241285}
   m_Direction: 2
   m_Value: 1.0000007
-  m_Size: 0.6806775
+  m_Size: 0.68067753
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10355,7 +10367,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 492541601}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
