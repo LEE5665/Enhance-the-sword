@@ -164,6 +164,11 @@ public class InventoryManager : MonoBehaviour
         SellButtonOnOff(true);
         ItemName.text = $"{data.itemName}";
         textDescription.text = $"{data.description}\n판매가격 : {data.sell}";
+        if (data.type == "upgradeItem")
+        {
+            textDescription.text += $"\n업그레이드 확률 : {data.upgrade}%";
+            textDescription.text += $"\n업그레이드 가격 : {data.upgradeCost}";
+        }
     }
     public void SetNullDescription()
     {
@@ -239,37 +244,52 @@ public class InventoryManager : MonoBehaviour
     {
         upgradeButton.interactable = onoff;
     }
+    
+    public void SellClick()
+{
+    DecreaseSelectedItemAmount(1, true);
+}
 
-    public void SellSelectedItem()
+    public void DecreaseSelectedItemAmount(int amountToDecrease = 1, bool addMoney = false)
     {
-        var selectedItem = Inventory[InventorySelect];
+        int index = InventorySelect;
 
-        if (selectedItem.id == 0)
+        if (index < 0 || index >= Inventory.Count)
+        {
+            Debug.LogWarning("선택된 인덱스가 유효하지 않습니다.");
+            return;
+        }
+
+        var item = Inventory[index];
+        if (item.id == 0)
         {
             Debug.Log("빈 슬롯입니다.");
             return;
         }
 
-        var itemData = GetItemData(selectedItem.id);
+        var itemData = GetItemData(item.id);
         if (itemData == null)
         {
             Debug.LogWarning("아이템 데이터가 없습니다.");
             return;
         }
 
-        money += itemData.sell;
-        selectedItem.amount -= 1;
-
-        if (selectedItem.amount <= 0)
+        if (addMoney)
         {
-            SetNullDescription();
-            selectedItem.id = 0;
-            selectedItem.amount = 0;
+            money += itemData.sell * amountToDecrease;
+            MoneyDIsplayUpdate();
         }
-        moneyDisplay.text = $"COIN : {money}";
+
+        item.amount -= amountToDecrease;
+        if (item.amount <= 0)
+        {
+            item.id = 0;
+            item.amount = 0;
+            SetNullDescription();
+        }
+
         RefreshUI();
-        // 설명 초기화 또는 필요 시 유지
-        Debug.Log($"{itemData.itemName} 판매 완료. 남은 수량: {selectedItem.amount}, 현재 소지금: {money}");
+        Debug.Log($"{itemData.itemName} {(addMoney ? "판매" : "사용")} 완료. 남은 수량: {item.amount}");
     }
 
     public void UseSelectedItem()

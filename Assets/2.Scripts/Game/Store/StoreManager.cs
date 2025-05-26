@@ -6,6 +6,7 @@ public class StoreManager : MonoBehaviour
 {
     [SerializeField] public Transform storeSlotParent;
     public StoreSlot[] StoreSlots;
+    public TextMeshProUGUI itemName;
     public TextMeshProUGUI textDescription;
 
     // IEnumerator Start()
@@ -26,10 +27,12 @@ public class StoreManager : MonoBehaviour
 
     public void SetDescription(ItemData data)
     {
+        itemName.text = data.itemName;
         textDescription.text = $"{data.description}\n구매가격 : {data.sell}";
     }
     public void SetNullDescription()
     {
+        itemName.text = "";
         textDescription.text = $"아이템 정보가 없습니다.";
     }
 

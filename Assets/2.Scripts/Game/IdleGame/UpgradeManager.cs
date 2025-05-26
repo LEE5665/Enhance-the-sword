@@ -161,13 +161,21 @@ public class UpgradeManager : MonoBehaviour
             Debug.Log($"업그레이드 실패! (기본 {baseRate}% + 보너스 {bonusRate}%) → 최종 확률 {finalRate}%, 주사위: {rand}");
         }
 
+        InventoryManager.Instance.DecreaseSelectedItemAmount();
         // 슬롯 제거
         UpgradeSlotManager.Instance.ClearAllUpgradeSlots();
         InventoryManager.Instance.UpgradeDescription();
 
         // 선택 해제 및 UI 갱신
-        InventoryManager.Instance.InventorySelect = -1;
-        InventoryManager.Instance.SetNullDescription();
+        var remainingItem = InventoryManager.Instance.Inventory[selectedIndex];
+        if (remainingItem.amount <= 0)
+        {
+            InventoryManager.Instance.InventorySelect = -1;
+            InventoryManager.Instance.SetNullDescription();
+            InventoryManager.Instance.UpgradeButtonOnOff(false);
+        }
+
+        InventoryManager.Instance.RefreshUI();
         InventoryManager.Instance.RefreshUI();
     }
     private int UpgradeBonus()
