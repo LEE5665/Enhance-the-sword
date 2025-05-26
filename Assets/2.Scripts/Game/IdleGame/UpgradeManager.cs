@@ -163,6 +163,7 @@ public class UpgradeManager : MonoBehaviour
 
         // 슬롯 제거
         UpgradeSlotManager.Instance.ClearAllUpgradeSlots();
+        InventoryManager.Instance.UpgradeDescription();
 
         // 선택 해제 및 UI 갱신
         InventoryManager.Instance.InventorySelect = -1;

@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
     public Transform ParentObject;
     private List<GameObject> slotObjects = new List<GameObject>();
     public TextMeshProUGUI textDescription;
+    public TextMeshProUGUI ItemName;
 
     public int InventorySelect = -1;
     public int StoreSelect = -1;
@@ -161,11 +162,13 @@ public class InventoryManager : MonoBehaviour
     public void SetDescription(ItemData data, int n = 0)
     {
         SellButtonOnOff(true);
+        ItemName.text = $"{data.itemName}";
         textDescription.text = $"{data.description}\n판매가격 : {data.sell}";
     }
     public void SetNullDescription()
     {
         SellButtonOnOff(false);
+        ItemName.text = $"";
         textDescription.text = $"아이템 정보가 없습니다.";
     }
     public void AddItemTest()
