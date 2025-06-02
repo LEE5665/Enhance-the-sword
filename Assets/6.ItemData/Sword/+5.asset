@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 205
   itemName: "\uD3C9\uBC94\uD55C \uAC80 +5"
-  icon: {fileID: 5342282718528360277, guid: d7e13350dfdea3d498d3da4843124a16, type: 3}
+  icon: {fileID: -1410531292025007659, guid: 2be5735a8dfde6f4db332cecdd0207f9, type: 3}
   description: "\uADF8\uB0E5 \uAC80."
   buy: 100
   sell: 90

@@ -148,20 +148,32 @@ public class UpgradeManager : MonoBehaviour
         int baseRate = itemData.upgrade;
         int bonusRate = UpgradeBonus(); // 아래 함수 참조
         int finalRate = baseRate + bonusRate;
+        int resetdepend = 0;
 
         int rand = Random.Range(0, 100);
 
         if (rand < finalRate)
         {
             InventoryManager.Instance.AddItem(currentId + 1, 1);
+            UIManager.Instance.ShowNotice("업그레이드 성공!", "알림", Color.green);
             Debug.Log($"업그레이드 성공! +{bonusRate}% 보너스 포함 최종 {finalRate}%. {currentId + 1} 아이템 추가");
         }
         else
         {
+            foreach (var slot in UpgradeSlotManager.Instance.upgradeSlots)
+            {
+                if (slot.id == 100)
+                {
+                    resetdepend = 1;
+                }
+            }
+            UIManager.Instance.ShowNotice("업그레이드 실패", "알림");
             Debug.Log($"업그레이드 실패! (기본 {baseRate}% + 보너스 {bonusRate}%) → 최종 확률 {finalRate}%, 주사위: {rand}");
         }
-
-        InventoryManager.Instance.DecreaseSelectedItemAmount();
+        if (resetdepend == 0)
+        {
+            InventoryManager.Instance.DecreaseSelectedItemAmount();
+        }
         // 슬롯 제거
         UpgradeSlotManager.Instance.ClearAllUpgradeSlots();
         InventoryManager.Instance.UpgradeDescription();
