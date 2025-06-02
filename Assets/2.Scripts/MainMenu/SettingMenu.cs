@@ -19,7 +19,7 @@ public class SettingsMenu : MonoBehaviour
 
     void Start()
     {
-        // 해상도 목록 불러오기
+        
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
 
@@ -42,7 +42,7 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
 
-        // 초기값 적용
+        
         fullscreenToggle.isOn = Screen.fullScreen;
         float masterVol = PlayerPrefs.GetFloat("Master", 1.0f);
         float musicVol  = PlayerPrefs.GetFloat("Music", 1.0f);

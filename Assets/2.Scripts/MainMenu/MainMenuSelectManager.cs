@@ -8,7 +8,7 @@ public class MainMenuSelectManager : MonoBehaviour
 {
     public static MainMenuSelectManager Instance { get; private set; }
     private string saveFilePath;
-    public int startState = 0; // new = 0 load = 1
+    public int startState = 0; 
     [SerializeField] private Button LoadButton;
 
     private void Awake()

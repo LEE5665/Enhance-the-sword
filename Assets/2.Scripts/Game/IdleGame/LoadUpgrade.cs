@@ -10,7 +10,7 @@ public class LoadUpgrade : MonoBehaviour
     [SerializeField] private GameObject Item;
     [SerializeField] private int DefaultCost;
     [SerializeField] private Button UpgradeButton;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         if (LvText != null)
@@ -56,12 +56,12 @@ public class LoadUpgrade : MonoBehaviour
         }
         Debug.Log("내 오브젝트 이름은: " + myName);
 
-        // if (UpgradeManager.Instance.Upgrades.ContainsKey(myName))
-        // {
-        //     UpgradeManager.Instance.Upgrades[myName]++;
-        //     Debug.Log($"{myName} 업그레이드 레벨: {UpgradeManager.Instance.Upgrades[myName]}");
-        //     LvText.text = $"Lv{UpgradeManager.Instance.Upgrades[myName]}";
-        // }
+        
+        
+        
+        
+        
+        
     }
 
     public void BigUpgradeClick(GameObject clickedObject)

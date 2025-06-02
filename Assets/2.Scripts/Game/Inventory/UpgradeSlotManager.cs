@@ -8,7 +8,7 @@ public class UpgradeSlotManager : MonoBehaviour
     public static UpgradeSlotManager Instance { get; private set; }
 
     public InventoryManager.SaveItem[] upgradeSlots = new InventoryManager.SaveItem[3];
-    public GameObject[] upgradeSlotUI; // UI 슬롯 오브젝트 3개 연결
+    public GameObject[] upgradeSlotUI; 
 
     private string savePath;
 
@@ -77,7 +77,7 @@ public class UpgradeSlotManager : MonoBehaviour
     }
     public bool TryAddItem(InventoryManager.SaveItem item)
     {
-        // 슬롯당 1개 제한, 중복 아이템 금지
+        
         for (int i = 0; i < upgradeSlots.Length; i++)
         {
             if (upgradeSlots[i].id == item.id)
@@ -109,7 +109,7 @@ public class UpgradeSlotManager : MonoBehaviour
             var uiSlot = upgradeSlotUI[i].GetComponent<UpgradeSlot>();
             if (uiSlot != null)
             {
-                uiSlot.RefreshSlot(); // UI 직접 갱신
+                uiSlot.RefreshSlot(); 
                 uiSlot.SetSelectBorder(i == selectedIndex);
             }
         }
@@ -135,14 +135,14 @@ public class UpgradeSlotManager : MonoBehaviour
             return;
         }
 
-        // 인벤토리에 아이템 1개 추가
+        
         InventoryManager.Instance.AddItem(slot.id, 1);
 
-        // 해당 슬롯 비우기
+        
         upgradeSlots[selectedIndex].id = 0;
         upgradeSlots[selectedIndex].amount = 0;
 
-        // 선택 해제 및 UI 갱신
+        
         selectedIndex = -1;
         RefreshUpgradeUI();
 

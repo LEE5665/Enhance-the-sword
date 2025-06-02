@@ -15,15 +15,15 @@ public class Miner : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // 시작 위치 (녹색)
+        
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(startPos, 0.2f);
 
-        // 목표 위치 (빨강)
+        
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(targetPos, 0.2f);
 
-        // 이동 경로 라인
+        
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(startPos, targetPos);
     }

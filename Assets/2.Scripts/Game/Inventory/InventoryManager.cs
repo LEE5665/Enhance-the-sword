@@ -132,7 +132,7 @@ public class InventoryManager : MonoBehaviour
     {
         int usableSlotCount = Inventory.Count;
 
-        // 먼저, 기존 슬롯 중 같은 아이템이 있는지 확인
+        
         for (int i = 0; i < usableSlotCount; i++)
         {
             if (Inventory[i].id == id)
@@ -143,7 +143,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // 빈 슬롯에 새로 추가
+        
         for (int i = 0; i < usableSlotCount; i++)
         {
             if (Inventory[i].id == 0)
@@ -155,7 +155,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // 꽉 차 있으면 추가 불가
+        
         Debug.LogWarning("인벤토리가 가득 찼습니다. 아이템을 추가할 수 없습니다.");
     }
 
@@ -320,7 +320,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // 업그레이드 슬롯에 추가 시도
+        
         bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
         if (!added)
         {
@@ -329,7 +329,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // 인벤토리에서 1개 제거
+        
         selectedItem.amount -= 1;
         if (selectedItem.amount <= 0)
         {

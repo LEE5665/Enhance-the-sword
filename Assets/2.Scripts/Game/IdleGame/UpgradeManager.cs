@@ -66,7 +66,7 @@ public class UpgradeManager : MonoBehaviour
 
     private void NewGame()
     {
-        // 기본값 세팅
+        
         Upgrades = new Dictionary<string, int>
     {
         { "Click", 1 },
@@ -141,12 +141,12 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        // 소지금 차감
+        
         InventoryManager.Instance.money -= upgradeCost;
         InventoryManager.Instance.MoneyDIsplayUpdate();
 
         int baseRate = itemData.upgrade;
-        int bonusRate = UpgradeBonus(); // 아래 함수 참조
+        int bonusRate = UpgradeBonus(); 
         int finalRate = baseRate + bonusRate;
         int resetdepend = 0;
 
@@ -174,11 +174,11 @@ public class UpgradeManager : MonoBehaviour
         {
             InventoryManager.Instance.DecreaseSelectedItemAmount();
         }
-        // 슬롯 제거
+        
         UpgradeSlotManager.Instance.ClearAllUpgradeSlots();
         InventoryManager.Instance.UpgradeDescription();
 
-        // 선택 해제 및 UI 갱신
+        
         var remainingItem = InventoryManager.Instance.Inventory[selectedIndex];
         if (remainingItem.amount <= 0)
         {

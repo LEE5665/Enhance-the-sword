@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         upgradePanel.SetActive(false);
         clickerPanel.SetActive(false);
 
-        // 버튼들 색상 초기화 (흰색)
+        
         if (ColorUtility.TryParseHtmlString("#FFFFFF", out c))
         {
             inventory.GetComponent<Image>().color = c;
@@ -53,10 +53,10 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
-        // 옵션 버튼/패널은 여기서 제어 X (토글 함수로만!)
+        
     }
 
-    // 옵션 패널 토글 함수 + 버튼 색상도 변경
+    
     public void ToggleOptionPanel()
     {
         bool isActive = !optionPanel.activeSelf;

@@ -12,7 +12,7 @@ public class SettingSlider : MonoBehaviour, IPointerUpHandler
     {
         slider = GetComponent<Slider>();
 
-        // 드래그 중엔 실시간 반영만!
+        
         slider.onValueChanged.AddListener(OnVolumeChanged);
     }
 
@@ -32,7 +32,7 @@ public class SettingSlider : MonoBehaviour, IPointerUpHandler
         }
     }
 
-    // 드래그 종료 시에만 저장
+    
     public void OnPointerUp(PointerEventData eventData)
     {
         Debug.Log("볼륨 저장");

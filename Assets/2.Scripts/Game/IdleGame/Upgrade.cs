@@ -27,7 +27,7 @@ public class Upgrade : MonoBehaviour
             Debug.Log($"{myName} 새로 등록: {UpgradeManager.Instance.Upgrades[myName]}");
         }
 
-        //UpgradeManager.Instance.SaveUpgradeData();
+        
     }
 
     public void BigUpgradeClick(GameObject clickedObject)
@@ -47,6 +47,6 @@ public class Upgrade : MonoBehaviour
             Debug.Log($"{myName} 새로 등록: {UpgradeManager.Instance.Upgrades[myName]}");
         }
 
-        //UpgradeManager.Instance.SaveUpgradeData();
+        
     }
 }

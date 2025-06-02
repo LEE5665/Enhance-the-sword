@@ -36,7 +36,7 @@ public class UpgradeSlot : MonoBehaviour
             }
         }
 
-        SetSelectBorder(false); // 기본은 선택 안된 상태
+        SetSelectBorder(false); 
     }
 
     public void OnClick()
@@ -67,7 +67,7 @@ public class UpgradeSlot : MonoBehaviour
         Debug.Log($"업그레이드 슬롯 {slotIndex} 클릭: 비어 있음");
     }
 
-        // 선택 테두리 갱신
+        
         UpgradeSlotManager.Instance.SetSelectedIndex(slotIndex);
     }
 

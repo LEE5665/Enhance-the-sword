@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
     public void SetMasterVolume(float value)
     {
         Master.volume = Mathf.Clamp01(value);
-        mixer.SetFloat("Master", Mathf.Log10(value <= 0 ? 0.0001f : value) * 20f); // -80dB ~ 0dB
+        mixer.SetFloat("Master", Mathf.Log10(value <= 0 ? 0.0001f : value) * 20f); 
     }
 
     public void SetMusicVolume(float value)
@@ -46,7 +46,7 @@ public class AudioManager : MonoBehaviour
         mixer.SetFloat("SFX", Mathf.Log10(value <= 0 ? 0.0001f : value) * 20f);
     }
 
-    // 저장 함수는 이전과 동일
+    
     public void SaveMasterVolume(float value)
     {
         PlayerPrefs.SetFloat("Master", value);

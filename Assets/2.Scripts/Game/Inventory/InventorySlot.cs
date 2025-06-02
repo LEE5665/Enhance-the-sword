@@ -107,7 +107,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (inventory == null || icon.sprite == null) return;
 
-        // 드래그용 슬롯 복제
+        
         ghostSlot = Instantiate(gameObject, transform.root);
         ghostSlot.transform.SetAsLastSibling();
 
@@ -146,15 +146,15 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             var inventory = FindAnyObjectByType<InventoryManager>();
             if (inventory != null)
             {
-                // 아이템 스왑
+                
                 var temp = inventory.Inventory[slotIndex];
                 inventory.Inventory[slotIndex] = inventory.Inventory[draggedSlot.draggedIndex];
                 inventory.Inventory[draggedSlot.draggedIndex] = temp;
 
-                // 선택 인덱스 업데이트 (원하면)
+                
                 inventory.InventorySelect = slotIndex;
 
-                // UI 갱신
+                
                 inventory.RefreshUI();
             }
         }

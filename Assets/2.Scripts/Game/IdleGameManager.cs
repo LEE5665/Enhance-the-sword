@@ -7,13 +7,13 @@ public class IdleGameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI CoinText;
     InventoryManager Inventory;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         Inventory = FindAnyObjectByType<InventoryManager>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
     }

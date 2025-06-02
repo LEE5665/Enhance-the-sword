@@ -34,7 +34,7 @@ public class SaveManager : MonoBehaviour
                 LoadButton.interactable = true;
 
             Debug.Log("세이브 파일 있음! → 불러오기");
-            // LoadGame();
+            
         }
         else
         {
@@ -42,7 +42,7 @@ public class SaveManager : MonoBehaviour
                 LoadButton.interactable = false;
 
             Debug.Log("세이브 파일 없음! → 새로 시작");
-            // NewGame();
+            
         }
     }
 
