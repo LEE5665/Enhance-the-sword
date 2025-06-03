@@ -26,9 +26,13 @@ public class InventoryManager : MonoBehaviour
     public TextMeshProUGUI useButtonText;
     public Button upgradeButton;
 
+    private List<SaveItem> filteredInventory;
+    private bool isFiltered = false;
+
     public static InventoryManager Instance { get; private set; }
 
     private string saveFilePath;
+    public string currentFilterType = "";
 
     private void Awake()
     {
@@ -132,7 +136,7 @@ public class InventoryManager : MonoBehaviour
     {
         int usableSlotCount = Inventory.Count;
 
-        
+
         for (int i = 0; i < usableSlotCount; i++)
         {
             if (Inventory[i].id == id)
@@ -143,7 +147,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        
+
         for (int i = 0; i < usableSlotCount; i++)
         {
             if (Inventory[i].id == 0)
@@ -155,7 +159,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        
+
         Debug.LogWarning("인벤토리가 가득 찼습니다. 아이템을 추가할 수 없습니다.");
     }
 
@@ -179,6 +183,13 @@ public class InventoryManager : MonoBehaviour
     public void AddItemTest()
     {
         AddItem(1, 1);
+    }
+    public void AddItemTestt()
+    {
+        for (int i = 200; i <= 208; i++)
+        {
+            AddItem(i, 1);
+        }
     }
     public void AddMoneyTest()
     {
@@ -209,17 +220,35 @@ public class InventoryManager : MonoBehaviour
         moneyDisplay.text = $"COIN : {money}";
     }
 
-    public void RefreshUI()
+public void RefreshUI()
+{
+    if (isFiltered && !string.IsNullOrEmpty(currentFilterType))
     {
-        for (int i = 0; i < Inventory.Count; i++)
+        // filteredInventory를 항상 새로 만듦
+        filteredInventory = new List<SaveItem>();
+        foreach (var item in Inventory)
         {
-            if (i < slotObjects.Count)
-            {
-                InventorySlot slot = slotObjects[i].GetComponent<InventorySlot>();
-                slot.SetSlot(i, Inventory[i]);
-            }
+            var itemData = GetItemData(item.id);
+            if (item.id != 0 && itemData != null && itemData.type == currentFilterType)
+                filteredInventory.Add(new SaveItem { id = item.id, amount = item.amount });
+        }
+        while (filteredInventory.Count < Inventory.Count)
+            filteredInventory.Add(new SaveItem { id = 0, amount = 0 });
+
+        RefreshUI_Filtered();
+        return;
+    }
+    // 필터 아닐 때는 원래대로
+    for (int i = 0; i < Inventory.Count; i++)
+    {
+        if (i < slotObjects.Count)
+        {
+            InventorySlot slot = slotObjects[i].GetComponent<InventorySlot>();
+            slot.SetSlot(i, Inventory[i]);
         }
     }
+}
+
     public void RefreshStoreUI()
     {
         for (int i = 0; i < Inventory.Count; i++)
@@ -244,11 +273,11 @@ public class InventoryManager : MonoBehaviour
     {
         upgradeButton.interactable = onoff;
     }
-    
+
     public void SellClick()
-{
-    DecreaseSelectedItemAmount(1, true);
-}
+    {
+        DecreaseSelectedItemAmount(1, true);
+    }
 
     public void DecreaseSelectedItemAmount(int amountToDecrease = 1, bool addMoney = false)
     {
@@ -320,7 +349,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        
+
         bool added = UpgradeSlotManager.Instance.TryAddItem(new SaveItem { id = selectedItem.id, amount = 1 });
         if (!added)
         {
@@ -329,7 +358,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        
+
         selectedItem.amount -= 1;
         if (selectedItem.amount <= 0)
         {
@@ -343,7 +372,7 @@ public class InventoryManager : MonoBehaviour
     }
     public void UpgradeDescription()
     {
-                string descriptionText = "";
+        string descriptionText = "";
         foreach (var slot in UpgradeSlotManager.Instance.upgradeSlots)
         {
             if (slot.id != 0)
@@ -356,5 +385,59 @@ public class InventoryManager : MonoBehaviour
             }
         }
         UpgradeManager.Instance.SetUpgradeDescription(descriptionText);
+    }
+
+    public void SortInventoryById()
+    {
+        // 아이템 있는 것만 id 기준 정렬 + 빈 슬롯 뒤로
+        Inventory.Sort((a, b) =>
+        {
+            if (a.id == 0 && b.id == 0) return 0;
+            if (a.id == 0) return 1;
+            if (b.id == 0) return -1;
+            return a.id.CompareTo(b.id);
+        });
+        RefreshUI();
+    }
+
+    public void FilterByType(string type)
+    {
+        filteredInventory = new List<SaveItem>();
+        // type에 맞는 아이템만 추출
+        foreach (var item in Inventory)
+        {
+            var itemData = GetItemData(item.id);
+            if (item.id != 0 && itemData != null && itemData.type == type)
+            {
+                filteredInventory.Add(new SaveItem { id = item.id, amount = item.amount });
+            }
+        }
+        // 나머지 칸은 빈칸으로
+        while (filteredInventory.Count < Inventory.Count)
+        {
+            filteredInventory.Add(new SaveItem { id = 0, amount = 0 });
+        }
+        currentFilterType = type;
+    isFiltered = true;
+    RefreshUI();
+    }
+
+    public void ResetFilter()
+    {
+        isFiltered = false;
+        currentFilterType = "";
+        RefreshUI();
+    }
+
+    private void RefreshUI_Filtered()
+    {
+        for (int i = 0; i < Inventory.Count; i++)
+        {
+            if (i < slotObjects.Count)
+            {
+                var slot = slotObjects[i].GetComponent<InventorySlot>();
+                slot.SetSlot(i, filteredInventory[i]);
+            }
+        }
     }
 }
